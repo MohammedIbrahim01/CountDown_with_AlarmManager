@@ -1,6 +1,5 @@
 package com.example.x.test028;
 
-import android.app.AlarmManager;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String APP_PREFS = "AppPrefs";
     public static final String KEY_COUNT = "key-count";
     private static final int START_VALUE = 21;
-    public static final String START_BUTTON_VISIBILITY = "start-button-visibility";
+    public static final String KEY_START_BUTTON_VISIBILITY = "start-button-visibility";
 
     private int startButtonVisibility;
 
@@ -22,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView counterContainerTextView;
     private Button startButton;
+    private Button resetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         //initViews
         counterContainerTextView = (TextView) findViewById(R.id.counter_container_textView);
         startButton = (Button) findViewById(R.id.start_button);
+        resetButton = (Button) findViewById(R.id.reset_button);
 
         //when click on startButton
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +46,16 @@ public class MainActivity extends AppCompatActivity {
                 Counter.start(MainActivity.this);
 
                 //hide startButton
-                editor.putInt(START_BUTTON_VISIBILITY, View.GONE);
+                editor.putInt(KEY_START_BUTTON_VISIBILITY, View.GONE);
+                editor.apply();
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putInt(KEY_COUNT, START_VALUE);
+                editor.putInt(KEY_START_BUTTON_VISIBILITY, View.VISIBLE);
                 editor.apply();
             }
         });
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         String count = String.valueOf(sharedPreferences.getInt(KEY_COUNT, START_VALUE));
 
-        startButtonVisibility = sharedPreferences.getInt(START_BUTTON_VISIBILITY, View.VISIBLE);
+        startButtonVisibility = sharedPreferences.getInt(KEY_START_BUTTON_VISIBILITY, View.VISIBLE);
 
         counterContainerTextView.setText(count);
 
